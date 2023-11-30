@@ -20,24 +20,37 @@ model User {
   id               String    @id @default(uuid())
   name             String
   email            String    @unique
-  created_projects Project[] @relation("created_projects")
+  created_projects Project[]
   password_hash    String
   salt             String
-  projects         Project[]
+  projects         UserProject[]
   created_at       DateTime  @default(now())
   updated_at       DateTime  @updatedAt
+  @@map("users")
+}
+
+model UserProject {
+  userId    String    @map("user_id")
+  projectId String    @map("project_id")
+  user      User    @relation(fields: [userId], references: [id])
+  project   Project @relation(fields: [projectId], references: [id])
+
+  @@id([userId, projectId])
+  @@map("user_projects")
 }
 
 model Project {
   id          String   @id @default(uuid())
   name        String
   description String
-  members     User[]
-  creator     User     @relation("created_projects", fields: [creatorId], references: [id])
+  members     UserProject[]
+  creator     User     @relation(fields: [creatorId], references: [id])
   creatorId   String
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
   Task        Task[]
+
+  @@map("projects")
 }
 
 model Task {
@@ -49,11 +62,25 @@ model Task {
   updated_at  DateTime @updatedAt
   project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId   String
-  Tag         Tag[]
+  Tag         TagsTask[]
+
+  @@map("tasks")
+}
+
+model TagsTask {
+  tagId  String  @map("tag_id")
+  taskId String  @map("task_id")
+  tag    Tag  @relation(fields: [tagId], references: [id])
+  task   Task @relation(fields: [taskId], references: [id])
+
+  @@id([tagId, taskId])
+  @@map("tags_task")
 }
 
 model Tag {
   id    String @id @default(uuid())
   title String
-  task  Task[]
+  tasks  TagsTask[]
+
+  @@map("tags")
 }

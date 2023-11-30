@@ -29,6 +29,9 @@ dependencies:
   class-validator:
     specifier: ^0.14.0
     version: 0.14.0
+  prisma-pagination:
+    specifier: ^0.2.3
+    version: 0.2.3
   reflect-metadata:
     specifier: ^0.1.13
     version: 0.1.13
@@ -5537,6 +5540,10 @@ packages:
       ansi-styles: 5.2.0
       react-is: 18.2.0
     dev: true
+
+  /prisma-pagination@0.2.3:
+    resolution: {integrity: sha512-KVKCGz5BVTYK64dpqCo7ITNFN02UN5hSzBYyR4vqNF7I4BetUeO/q7B7FECmCOPIyCBWYf2Zte68pD9S2khD3g==}
+    dev: false
 
   /prisma@5.6.0:
     resolution: {integrity: sha512-EEaccku4ZGshdr2cthYHhf7iyvCcXqwJDvnoQRAJg5ge2Tzpv0e2BaMCp+CbbDUwoVTzwgOap9Zp+d4jFa2O9A==}

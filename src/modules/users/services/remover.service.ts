@@ -5,7 +5,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { UserRepository } from '../repositories';
-import { FindOneParams } from '../dto/find-one-params.dto';
 import { Prisma, User } from '@prisma/client';
 import { PrismaErrorCodes } from '../../../shared/enums';
 
@@ -15,16 +14,16 @@ export class RemoverService {
 
   constructor(private readonly userRepository: UserRepository) {}
 
-  public async remove(dto: FindOneParams): Promise<User> {
+  public async remove(id: string): Promise<User> {
     try {
-      return await this.userRepository.delete({ id: dto.id });
+      return await this.userRepository.delete({ id: id });
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === PrismaErrorCodes.NOT_FOUND
       )
         throw new NotFoundException(
-          `could not find user with id: ${dto.id}`,
+          `could not find user with id: ${id}`,
           error.stack,
         );
 

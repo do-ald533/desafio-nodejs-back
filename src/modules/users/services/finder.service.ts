@@ -5,9 +5,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { UserRepository } from '../repositories';
-import { FindOneParams } from '../dto/find-one-params.dto';
-import { User, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { PrismaErrorCodes } from '../../../shared/enums';
+import { UserEntity } from '../entities';
 
 @Injectable()
 export class FinderService {
@@ -15,16 +15,17 @@ export class FinderService {
 
   constructor(private readonly userRepository: UserRepository) {}
 
-  public async findOne(dto: FindOneParams): Promise<User> {
+  public async findOne(id: string): Promise<UserEntity> {
     try {
-      return await this.userRepository.findById(dto.id);
+      const foundUser = await this.userRepository.findById(id);
+      return new UserEntity(foundUser);
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === PrismaErrorCodes.NOT_FOUND
       )
         throw new NotFoundException(
-          `could not find user with id: ${dto.id}`,
+          `could not find user with id: ${id}`,
           error.stack,
         );
 

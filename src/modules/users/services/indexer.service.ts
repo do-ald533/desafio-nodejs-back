@@ -3,8 +3,10 @@ import {
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
+import { PaginatedResult } from 'prisma-pagination';
+import { Prisma } from '@prisma/client';
 import { UserRepository } from '../repositories';
+import { UserEntity } from '../entities';
 
 @Injectable()
 export class IndexerService {
@@ -12,9 +14,13 @@ export class IndexerService {
 
   constructor(private readonly userRepository: UserRepository) {}
 
-  public async index(where: Prisma.UserWhereInput): Promise<User[]> {
+  public async index(
+    limit: number,
+    page: number,
+    where?: Prisma.UserWhereInput,
+  ): Promise<PaginatedResult<UserEntity>> {
     try {
-      return await this.userRepository.findAll(where);
+      return await this.userRepository.findAll(limit, page, where);
     } catch (error) {
       this.logger.error(error);
       throw new InternalServerErrorException();
