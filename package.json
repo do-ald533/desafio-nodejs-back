@@ -18,7 +18,14 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "migrate:dev": "prisma migrate dev",
+    "migrate:dev:create": "prisma migrate dev --create-only",
+    "migrate:deploy": "pnpx prisma migrate deploy",
+    "migrate:reset": "pnpx prisma migrate reset",
+    "migrate:resolve": "pnpx prisma migrate resolve",
+    "prisma:generate": "pnpx prisma generate",
+    "prisma:studio": "pnpx prisma studio"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

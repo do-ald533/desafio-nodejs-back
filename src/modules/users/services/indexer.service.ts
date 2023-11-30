@@ -20,7 +20,10 @@ export class IndexerService {
     where?: Prisma.UserWhereInput,
   ): Promise<PaginatedResult<UserEntity>> {
     try {
-      return await this.userRepository.findAll(limit, page, where);
+      const result = await this.userRepository.findAll(limit, page, where);
+      const data = result.data.map((data) => new UserEntity(data));
+      const serializedResult = { ...result, data };
+      return serializedResult;
     } catch (error) {
       this.logger.error(error);
       throw new InternalServerErrorException();

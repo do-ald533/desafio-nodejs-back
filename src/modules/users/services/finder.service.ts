@@ -26,7 +26,7 @@ export class FinderService {
       )
         throw new NotFoundException(
           `could not find user with id: ${id}`,
-          error.stack,
+          error.message,
         );
 
       this.logger.error(error);

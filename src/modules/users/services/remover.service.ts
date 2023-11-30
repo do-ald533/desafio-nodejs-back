@@ -5,8 +5,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { UserRepository } from '../repositories';
-import { Prisma, User } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { PrismaErrorCodes } from '../../../shared/enums';
+import { UserEntity } from '../entities';
 
 @Injectable()
 export class RemoverService {
@@ -14,9 +15,10 @@ export class RemoverService {
 
   constructor(private readonly userRepository: UserRepository) {}
 
-  public async remove(id: string): Promise<User> {
+  public async remove(id: string): Promise<UserEntity> {
     try {
-      return await this.userRepository.delete({ id: id });
+      const deletedUser = await this.userRepository.delete({ id: id });
+      return new UserEntity(deletedUser);
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
@@ -24,7 +26,7 @@ export class RemoverService {
       )
         throw new NotFoundException(
           `could not find user with id: ${id}`,
-          error.stack,
+          error.message,
         );
 
       this.logger.error(error);

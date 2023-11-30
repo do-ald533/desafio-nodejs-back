@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -19,9 +20,12 @@ export class UpdaterService {
   ) {}
   public async update(id: string, payload: UpdateUserDto) {
     try {
-      await this.finderService.findOne(id);
+      const foundUser = await this.finderService.findOne(id);
 
+      if (!this.userUtils.verifyUser(foundUser, payload.password))
+        throw new BadRequestException({ message: 'passwords dont match' });
       const updatedUser = await this.userRepository.update({ id }, payload);
+
       return new UserEntity(updatedUser);
     } catch (error) {
       this.logger.error(error);
