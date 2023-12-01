@@ -15,8 +15,8 @@ export class IndexerService {
   constructor(private readonly userRepository: UserRepository) {}
 
   public async index(
-    limit: number,
-    page: number,
+    limit?: number,
+    page?: number,
     where?: Prisma.UserWhereInput,
   ): Promise<PaginatedResult<UserEntity>> {
     try {

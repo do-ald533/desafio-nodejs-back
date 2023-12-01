@@ -3,6 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { UserRepository } from '../repositories';
 import { FinderService } from './finder.service';
@@ -28,6 +29,9 @@ export class UpdaterService {
 
       return new UserEntity(updatedUser);
     } catch (error) {
+      if (error instanceof NotFoundException)
+        throw new NotFoundException(error.message);
+
       this.logger.error(error);
       throw new InternalServerErrorException(error);
     }

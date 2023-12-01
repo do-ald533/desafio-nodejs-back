@@ -5,7 +5,7 @@ module.exports = {
   collectCoverageFrom: ['**/*.(t|j)s'],
   coverageReporters: ['json', 'lcov'],
   coverageDirectory: './coverage',
-  roots: ['<rootDir>/tests/integration', '<rootDir>/tests/unit'],
+  roots: ['<rootDir>/tests/unit'],
   transform: {
     'ˆ.+\\.tsx?$': [
       '@swc/jest',

@@ -7,22 +7,27 @@ import {
 import { UserRepository } from '../repositories';
 import { Prisma } from '@prisma/client';
 import { PrismaErrorCodes } from '../../../shared/enums';
-import { UserEntity } from '../entities';
+import { FinderService } from './finder.service';
 
 @Injectable()
 export class RemoverService {
   private readonly logger = new Logger(RemoverService.name);
 
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly finderService: FinderService,
+  ) {}
 
-  public async remove(id: string): Promise<UserEntity> {
+  public async remove(id: string): Promise<{ message: string; id: string }> {
     try {
+      await this.finderService.findOne(id);
       const deletedUser = await this.userRepository.delete({ id: id });
-      return new UserEntity(deletedUser);
+      return { message: `deleted user`, id: deletedUser.id };
     } catch (error) {
       if (
-        error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === PrismaErrorCodes.NOT_FOUND
+        (error instanceof Prisma.PrismaClientKnownRequestError &&
+          error.code === PrismaErrorCodes.NOT_FOUND) ||
+        error instanceof NotFoundException
       )
         throw new NotFoundException(
           `could not find user with id: ${id}`,

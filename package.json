@@ -28,12 +28,12 @@
     "prisma:studio": "pnpx prisma studio"
   },
   "dependencies": {
-    "@nestjs/swagger": "^7.1.16",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.1.1",
     "@nestjs/core": "^10.0.0",
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/swagger": "^7.1.16",
     "@prisma/client": "^5.6.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
@@ -42,8 +42,11 @@
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
+    "@automock/adapters.nestjs": "^2.0.0",
+    "@automock/jest": "^2.0.0",
     "@commitlint/cli": "^18.4.3",
     "@commitlint/config-conventional": "^18.4.3",
+    "@faker-js/faker": "^8.3.1",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
