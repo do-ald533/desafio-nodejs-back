@@ -68,7 +68,7 @@ export class UserRepository {
     data: Prisma.UserUpdateInput,
   ): Promise<User> {
     try {
-      return this.prismaService.user.update({
+      return await this.prismaService.user.update({
         data,
         where,
       });

@@ -1,1 +1,1 @@
-export class Project {}
+export class ProjectEntity {}
