@@ -5,5 +5,5 @@ export class FindOneParams {
   @ApiProperty()
   @IsNotEmpty()
   @IsUUID()
-  id?: string;
+  id: string;
 }

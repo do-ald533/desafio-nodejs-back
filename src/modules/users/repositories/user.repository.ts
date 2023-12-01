@@ -1,6 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../../../shared/services/prisma.service';
 import { User, Prisma } from '@prisma/client';
+import { PaginatedResult, createPaginator } from 'prisma-pagination';
+import { UserEntity } from '../entities';
 
 @Injectable()
 export class UserRepository {
@@ -23,11 +25,23 @@ export class UserRepository {
     }
   }
 
-  public async findAll(options?: Prisma.UserWhereInput): Promise<User[]> {
+  public async findAll(
+    limit: number,
+    page: number,
+    options?: Prisma.UserWhereInput,
+  ): Promise<PaginatedResult<UserEntity>> {
     try {
-      return await this.prismaService.user.findMany({
-        where: options,
-      });
+      const paginate = createPaginator({ perPage: limit });
+
+      return await paginate<UserEntity, Prisma.UserFindManyArgs>(
+        this.prismaService.user,
+        {
+          where: options,
+        },
+        {
+          page,
+        },
+      );
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) throw error;
 

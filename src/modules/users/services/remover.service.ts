@@ -5,27 +5,33 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { UserRepository } from '../repositories';
-import { FindOneParams } from '../dto/find-one-params.dto';
-import { Prisma, User } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { PrismaErrorCodes } from '../../../shared/enums';
+import { FinderService } from './finder.service';
 
 @Injectable()
 export class RemoverService {
   private readonly logger = new Logger(RemoverService.name);
 
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly finderService: FinderService,
+  ) {}
 
-  public async remove(dto: FindOneParams): Promise<User> {
+  public async remove(id: string): Promise<{ message: string; id: string }> {
     try {
-      return await this.userRepository.delete({ id: dto.id });
+      await this.finderService.findOne(id);
+      const deletedUser = await this.userRepository.delete({ id: id });
+      return { message: `deleted user`, id: deletedUser.id };
     } catch (error) {
       if (
-        error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === PrismaErrorCodes.NOT_FOUND
+        (error instanceof Prisma.PrismaClientKnownRequestError &&
+          error.code === PrismaErrorCodes.NOT_FOUND) ||
+        error instanceof NotFoundException
       )
         throw new NotFoundException(
-          `could not find user with id: ${dto.id}`,
-          error.stack,
+          `could not find user with id: ${id}`,
+          error.message,
         );
 
       this.logger.error(error);

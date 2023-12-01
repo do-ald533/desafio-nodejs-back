@@ -6,36 +6,64 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import {
+  CreateUserDto,
+  UpdateUserDto,
+  FindOneParams,
+  ListAllDto,
+} from './dtos';
+import {
+  CreatorService,
+  FinderService,
+  IndexerService,
+  RemoverService,
+} from './services';
+import { UserEntity } from './entities';
+import { ApiPaginatedResponse } from '../../shared/decorators/apiPaginatedResponse.decorator';
+import { UpdaterService } from './services/updater.service';
 
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly creatorService: CreatorService,
+    private readonly finderService: FinderService,
+    private readonly indexerService: IndexerService,
+    private readonly updaterService: UpdaterService,
+    private readonly removerService: RemoverService,
+  ) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  create(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
+    return this.creatorService.create(createUserDto);
   }
 
+  @ApiPaginatedResponse(UserEntity)
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@Query() query: ListAllDto) {
+    return this.indexerService.index(query.limit, query.page);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  findOne(@Param() findOneDto: FindOneParams): Promise<UserEntity> {
+    return this.finderService.findOne(findOneDto.id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  update(
+    @Param() findOneDto: FindOneParams,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.updaterService.update(findOneDto.id, updateUserDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  remove(@Param() findOneDto: FindOneParams) {
+    return this.removerService.remove(findOneDto.id);
   }
 }
