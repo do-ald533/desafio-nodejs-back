@@ -138,7 +138,14 @@ export class ProjectRepository {
 
   public async remove(where: Prisma.ProjectWhereUniqueInput): Promise<Project> {
     try {
-      return await this.prisma.project.delete({ where });
+      return await this.prisma.project.delete({
+        where,
+        include: {
+          creator: true,
+          members: true,
+          tasks: true,
+        },
+      });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) throw error;
 

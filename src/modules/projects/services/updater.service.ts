@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   Logger,
@@ -23,10 +24,15 @@ export class UpdaterService {
     payload: UpdateProjectDto,
   ): Promise<ProjectEntity> {
     try {
-      await this.projectUtils.validateProjectOwner(
-        projectId,
-        payload.creatorId,
-      );
+      if (
+        !(await this.projectUtils.validateProjectOwner(
+          projectId,
+          payload.creatorId,
+        ))
+      )
+        throw new BadRequestException(
+          'Only the creator of the project can execute this action',
+        );
 
       const project = await this.projectRepository.update(
         { id: projectId },
