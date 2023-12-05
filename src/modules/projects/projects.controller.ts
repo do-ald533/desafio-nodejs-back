@@ -15,8 +15,16 @@ import {
   CreatorService,
   FinderService,
   IndexerService,
+  RemoveMembersService,
+  RemoverService,
+  UpdaterService,
 } from './services';
-import { FindOneParams, CreateProjectDto, AddMembersDto } from './dto';
+import {
+  FindOneParams,
+  CreateProjectDto,
+  MembersDto,
+  UpdateProjectDto,
+} from './dto';
 import { ProjectEntity } from './entities';
 import { ListAllDto } from '../users/dtos';
 import { PaginatedResult } from 'prisma-pagination';
@@ -29,6 +37,9 @@ export class ProjectsController {
     private readonly finderService: FinderService,
     private readonly indexerService: IndexerService,
     private readonly addMembersService: AddMembersService,
+    private readonly removeMembersService: RemoveMembersService,
+    private readonly removerService: RemoverService,
+    private readonly updaterService: UpdaterService,
   ) {}
 
   @Post()
@@ -49,16 +60,22 @@ export class ProjectsController {
   }
 
   @Patch('add-members/:id')
-  addMembers(@Param() params: FindOneParams, @Body() payload: AddMembersDto) {
+  addMembers(@Param() params: FindOneParams, @Body() payload: MembersDto) {
     return this.addMembersService.addMembers(payload, params.id);
   }
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateProjectDto: UpdateProjectDto) {
-  //   return this.projectsService.update(+id, updateProjectDto);
-  // }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.projectsService.remove(+id);
-  // }
+  @Patch('remove-members/:id')
+  removeMembers(@Param() params: FindOneParams, @Body() payload: MembersDto) {
+    return this.removeMembersService.removeMembers(payload, params.id);
+  }
+
+  @Patch(':id')
+  update(@Param() dto: FindOneParams, @Body() payload: UpdateProjectDto) {
+    return this.updaterService.update(dto.id, payload);
+  }
+
+  @Delete(':id')
+  remove(@Param() { id }: FindOneParams) {
+    return this.removerService.remove(id);
+  }
 }

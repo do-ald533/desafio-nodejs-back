@@ -17,50 +17,51 @@ enum Status {
 }
 
 model User {
-  id               String    @id @default(uuid())
+  id               String        @id @default(uuid())
   name             String
-  email            String    @unique
+  email            String        @unique
   created_projects Project[]
   password_hash    String
   salt             String
   projects         UserProject[]
-  created_at       DateTime  @default(now())
-  updated_at       DateTime  @updatedAt
+  created_at       DateTime      @default(now())
+  updated_at       DateTime      @updatedAt
+
   @@map("users")
 }
 
 model UserProject {
-  userId    String    @map("user_id")
-  projectId String    @map("project_id")
-  user      User    @relation(fields: [userId], references: [id])
-  project   Project @relation(fields: [projectId], references: [id])
+  userId    String @map("user_id")
+  projectId String @map("project_id")
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([userId, projectId])
   @@map("user_projects")
 }
 
 model Project {
-  id          String   @id @default(uuid())
+  id          String        @id @default(uuid())
   name        String
   description String
   members     UserProject[]
   creatorId   String
-  creator     User     @relation(fields: [creatorId], references: [id])
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  tasks        Task[]
+  creator     User          @relation(fields: [creatorId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @updatedAt
+  tasks       Task[]
 
   @@map("projects")
 }
 
 model Task {
-  id          String   @id @default(uuid())
-  title       String   @db.VarChar(255)
+  id          String     @id @default(uuid())
+  title       String     @db.VarChar(255)
   description String
   status      Status
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
+  project     Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId   String
   Tag         TagsTask[]
 
@@ -68,19 +69,19 @@ model Task {
 }
 
 model TagsTask {
-  tagId  String  @map("tag_id")
-  taskId String  @map("task_id")
-  tag    Tag  @relation(fields: [tagId], references: [id])
-  task   Task @relation(fields: [taskId], references: [id])
+  tagId  String @map("tag_id")
+  taskId String @map("task_id")
+  tag    Tag    @relation(fields: [tagId], references: [id])
+  task   Task   @relation(fields: [taskId], references: [id])
 
   @@id([tagId, taskId])
   @@map("tags_task")
 }
 
 model Tag {
-  id    String @id @default(uuid())
+  id    String     @id @default(uuid())
   title String
-  tasks  TagsTask[]
+  tasks TagsTask[]
 
   @@map("tags")
 }

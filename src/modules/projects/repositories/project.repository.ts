@@ -75,7 +75,9 @@ export class ProjectRepository {
     }
   }
 
-  public async removeUsers(data): Promise<{ message: string }> {
+  public async removeUsers(
+    data: Array<Prisma.UserProjectWhereInput>,
+  ): Promise<{ message: string }> {
     try {
       await this.prisma.userProject.deleteMany({
         where: {

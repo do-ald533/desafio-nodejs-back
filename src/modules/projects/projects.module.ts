@@ -6,6 +6,9 @@ import {
   CreatorService,
   FinderService,
   IndexerService,
+  RemoveMembersService,
+  RemoverService,
+  UpdaterService,
 } from './services';
 import { PrismaService } from '../../shared/services/prisma.service';
 import { ProjectRepository } from './repositories';
@@ -21,9 +24,12 @@ import { ProjectValidationUtils } from './utils';
     FinderService,
     ProjectRepository,
     AddMembersService,
+    RemoveMembersService,
     UserFinderService,
     UserRepository,
     ProjectValidationUtils,
+    RemoverService,
+    UpdaterService,
   ],
 })
 export class ProjectsModule {}

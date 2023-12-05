@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsUUID } from 'class-validator';
 
-export class AddMembersDto {
+export class MembersDto {
   @IsNotEmpty()
   @IsUUID()
   creatorId: string;

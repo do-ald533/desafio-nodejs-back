@@ -5,13 +5,13 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { MembersDto } from '../dto/';
 import { ProjectRepository } from '../repositories';
 import { ProjectValidationUtils } from '../utils';
+import { MembersDto } from '../dto';
 
 @Injectable()
-export class AddMembersService {
-  private readonly logger = new Logger(AddMembersService.name);
+export class RemoveMembersService {
+  private readonly logger = new Logger(RemoveMembersService.name);
 
   constructor(
     private readonly projectRepository: ProjectRepository,
@@ -20,12 +20,12 @@ export class AddMembersService {
 
   private createPayloadForDb(memberIds: string[], projectId: string) {
     return memberIds.map((id) => ({
+      projectId,
       userId: id,
-      projectId: projectId,
     }));
   }
 
-  public async addMembers(payload: MembersDto, projectId: string) {
+  public async removeMembers(payload: MembersDto, projectId: string) {
     try {
       if (
         !(await this.projectValidationUtils.validateProjectOwner(
@@ -41,7 +41,7 @@ export class AddMembersService {
         ),
       );
 
-      return await this.projectRepository.addUsers(
+      return await this.projectRepository.removeUsers(
         this.createPayloadForDb(payload.memberIds, projectId),
       );
     } catch (error) {
