@@ -14,6 +14,11 @@ export class ProjectRepository {
     try {
       const project = await this.prisma.project.findFirstOrThrow({
         where: { id: projectId },
+        include: {
+          creator: true,
+          members: true,
+          tasks: true,
+        },
       });
       return project;
     } catch (error) {
@@ -36,6 +41,11 @@ export class ProjectRepository {
         this.prisma.project,
         {
           where: options,
+          include: {
+            creator: true,
+            members: true,
+            tasks: true,
+          },
         },
         {
           page,
@@ -49,7 +59,9 @@ export class ProjectRepository {
     }
   }
 
-  public async addUsers(data): Promise<{ message: string }> {
+  public async addUsers(
+    data: Array<Prisma.UserProjectUncheckedCreateInput>,
+  ): Promise<{ message: string }> {
     try {
       await this.prisma.userProject.createMany({ data });
       return {
@@ -79,10 +91,17 @@ export class ProjectRepository {
     }
   }
 
-  public async create(data: Prisma.ProjectCreateInput): Promise<Project> {
+  public async create(
+    data: Prisma.ProjectUncheckedCreateInput,
+  ): Promise<Project> {
     try {
       const createdProject = await this.prisma.project.create({
         data,
+        include: {
+          creator: true,
+          members: true,
+          tasks: true,
+        },
       });
       return createdProject;
     } catch (error) {
@@ -101,6 +120,11 @@ export class ProjectRepository {
       return await this.prisma.project.update({
         data,
         where,
+        include: {
+          creator: true,
+          members: true,
+          tasks: true,
+        },
       });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) throw error;

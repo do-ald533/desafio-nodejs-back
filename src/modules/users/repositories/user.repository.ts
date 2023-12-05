@@ -16,6 +16,10 @@ export class UserRepository {
         where: {
           id,
         },
+        include: {
+          created_projects: true,
+          projects: true,
+        },
       });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) throw error;
@@ -37,6 +41,10 @@ export class UserRepository {
         this.prismaService.user,
         {
           where: options,
+          include: {
+            created_projects: true,
+            projects: true,
+          },
         },
         {
           page,
@@ -54,6 +62,10 @@ export class UserRepository {
     try {
       return await this.prismaService.user.create({
         data,
+        include: {
+          created_projects: true,
+          projects: true,
+        },
       });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) throw error;
@@ -71,6 +83,10 @@ export class UserRepository {
       return await this.prismaService.user.update({
         data,
         where,
+        include: {
+          created_projects: true,
+          projects: true,
+        },
       });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) throw error;
@@ -82,7 +98,13 @@ export class UserRepository {
 
   public async delete(where: Prisma.UserWhereUniqueInput): Promise<User> {
     try {
-      return await this.prismaService.user.delete({ where });
+      return await this.prismaService.user.delete({
+        where,
+        include: {
+          created_projects: true,
+          projects: true,
+        },
+      });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) throw error;
 

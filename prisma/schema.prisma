@@ -44,11 +44,11 @@ model Project {
   name        String
   description String
   members     UserProject[]
-  creator     User     @relation(fields: [creatorId], references: [id])
   creatorId   String
+  creator     User     @relation(fields: [creatorId], references: [id])
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
-  Task        Task[]
+  tasks        Task[]
 
   @@map("projects")
 }
