@@ -1,8 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Exclude } from 'class-transformer';
+import { Exclude, Type } from 'class-transformer';
+import { UserCreatedProjectEntity } from './user-created-project.entity';
+import { UserProjectsEntity } from './user-projects.entity';
 
 export class UserEntity {
-  @ApiProperty()
+  @ApiProperty({ description: 'id of type uuid' })
   id: string;
   @ApiProperty()
   name: string;
@@ -20,7 +22,13 @@ export class UserEntity {
   @ApiProperty()
   updated_at: Date;
 
-  created_projects;
+  @ApiProperty()
+  @Type(() => UserCreatedProjectEntity)
+  created_projects: UserCreatedProjectEntity[];
+
+  @ApiProperty()
+  @Type(() => UserProjectsEntity)
+  projects: UserProjectsEntity[];
 
   constructor(partial: Partial<UserEntity>) {
     Object.assign(this, partial);
