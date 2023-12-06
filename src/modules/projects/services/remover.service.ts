@@ -25,7 +25,7 @@ export class RemoverService {
         error instanceof NotFoundException
       )
         throw new NotFoundException(
-          `could not find user with id: ${id}`,
+          `could not find project with id: ${id}`,
           error.message,
         );
 
