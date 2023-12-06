@@ -9,8 +9,14 @@ import {
   Query,
 } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
-import { CreatorService, FinderService, IndexerService } from './services';
-import { FindOneParams, ListAllDto } from './dto';
+import {
+  CreatorService,
+  FinderService,
+  IndexerService,
+  RemoverService,
+  UpdaterService,
+} from './services';
+import { FindOneParams, ListAllDto, RemoveTaskDto, UpdateTaskDto } from './dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -18,6 +24,8 @@ export class TasksController {
     private readonly creatorService: CreatorService,
     private readonly finderService: FinderService,
     private readonly indexerService: IndexerService,
+    private readonly removerService: RemoverService,
+    private readonly updaterService: UpdaterService,
   ) {}
 
   @Post()
@@ -35,13 +43,13 @@ export class TasksController {
     return this.finderService.findById(dto.id);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
-  //   return this.tasksService.update(+id, updateTaskDto);
-  // }
+  @Patch(':id')
+  update(@Param() params: FindOneParams, @Body() updateTaskDto: UpdateTaskDto) {
+    return this.updaterService.update(params.id, updateTaskDto);
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.tasksService.remove(+id);
-  // }
+  @Delete(':id')
+  remove(@Param() params: FindOneParams, @Query() query: RemoveTaskDto) {
+    return this.removerService.remove(params.id, query);
+  }
 }

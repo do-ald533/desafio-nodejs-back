@@ -6,13 +6,19 @@ import { ProjectEntity } from '../../projects/entities';
 export class TasksValidationUtil {
   constructor(private readonly projectFinderService: ProjectFinderService) {}
 
-  public async validateProjectId(projectId: string) {
+  private async validateProjectId(projectId: string) {
     return await this.projectFinderService.findById(projectId);
   }
 
-  public async validateUserMember(userId: string, project: ProjectEntity) {
+  private validateUserMember(userId: string, project: ProjectEntity) {
     const { members } = project;
-    console.log(members);
     return members.some(({ userId: id }) => id === userId);
+  }
+
+  public async validate(userId: string, projectId: string) {
+    return this.validateUserMember(
+      userId,
+      await this.validateProjectId(projectId),
+    );
   }
 }

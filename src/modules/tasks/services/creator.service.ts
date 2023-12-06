@@ -22,13 +22,10 @@ export class CreatorService {
 
   public async create(payload: CreateTaskDto) {
     try {
-      const project = await this.tasksValidation.validateProjectId(
-        payload.projectId,
-      );
       if (
-        !(await this.tasksValidation.validateUserMember(
+        !(await this.tasksValidation.validate(
           payload.userId,
-          project,
+          payload.projectId,
         ))
       )
         throw new BadRequestException(
