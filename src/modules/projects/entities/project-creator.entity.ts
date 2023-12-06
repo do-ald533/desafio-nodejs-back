@@ -1,18 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 
-export class UserCreatedProjectEntity {
-  @ApiProperty({ description: 'id of type uuid' })
+export class ProjectCreatorEntity {
+  @ApiProperty()
   id: string;
 
   @ApiProperty()
   name: string;
 
   @ApiProperty()
-  description: string;
-
-  @Exclude()
-  creatorId: string;
+  email: string;
 
   @Exclude()
   created_at: Date;
@@ -20,7 +17,12 @@ export class UserCreatedProjectEntity {
   @Exclude()
   updated_at: Date;
 
-  constructor(partial: Partial<UserCreatedProjectEntity>) {
+  @Exclude()
+  created_projects: Array<string>;
+
+  @Exclude()
+  projects: Array<string>;
+  constructor(partial: Partial<ProjectCreatorEntity>) {
     Object.assign(this, partial);
   }
 }

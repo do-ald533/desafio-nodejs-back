@@ -7,4 +7,7 @@ export class UserProjectsEntity {
 
   @ApiProperty()
   projectId: string;
+  constructor(partial: Partial<UserProjectsEntity>) {
+    Object.assign(this, partial);
+  }
 }
