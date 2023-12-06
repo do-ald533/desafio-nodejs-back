@@ -8,7 +8,7 @@ export class TaskEntity {
   @ApiProperty()
   id: string;
 
-  @ApiProperty({ type: TaskProjectEntity })
+  @ApiProperty({ type: () => TaskProjectEntity })
   @Type(() => TaskProjectEntity)
   project: TaskProjectEntity;
 
@@ -29,7 +29,7 @@ export class TaskEntity {
   @ApiProperty()
   updated_at: Date;
 
-  @ApiProperty({ type: Array<TaskTagEntity> })
+  @ApiProperty({ type: () => Array<TaskTagEntity> })
   @Type(() => TaskTagEntity)
   tags: TaskTagEntity[];
 

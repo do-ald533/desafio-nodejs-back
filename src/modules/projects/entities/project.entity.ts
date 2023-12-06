@@ -23,7 +23,7 @@ export class ProjectEntity {
   @Type(() => ProjectCreatorEntity)
   creator: ProjectCreatorEntity;
 
-  @ApiProperty({ type: Array<ProjectMembersEntity> })
+  @ApiProperty({ type: () => Array<ProjectMembersEntity> })
   @Type(() => ProjectMembersEntity)
   members: ProjectMembersEntity[];
 

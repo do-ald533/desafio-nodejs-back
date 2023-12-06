@@ -12,7 +12,7 @@ export class ProjectTasksEntity {
   @Exclude()
   description: string;
 
-  @ApiProperty({ type: () => Status })
+  @ApiProperty({ enum: Status })
   status: Status;
 
   @Exclude()
