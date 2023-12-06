@@ -10,13 +10,21 @@ import {
 } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import {
+  AddTagsService,
   CreatorService,
   FinderService,
   IndexerService,
+  RemoveTagsService,
   RemoverService,
   UpdaterService,
 } from './services';
-import { FindOneParams, ListAllDto, RemoveTaskDto, UpdateTaskDto } from './dto';
+import {
+  FindOneParams,
+  ListAllDto,
+  RemoveTaskDto,
+  TaskTagsDto,
+  UpdateTaskDto,
+} from './dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -26,6 +34,8 @@ export class TasksController {
     private readonly indexerService: IndexerService,
     private readonly removerService: RemoverService,
     private readonly updaterService: UpdaterService,
+    private readonly addTagsService: AddTagsService,
+    private readonly removeTagsService: RemoveTagsService,
   ) {}
 
   @Post()
@@ -41,6 +51,16 @@ export class TasksController {
   @Get(':id')
   findOne(@Param() dto: FindOneParams) {
     return this.finderService.findById(dto.id);
+  }
+
+  @Patch('add-tags/:id')
+  addTags(@Param() params: FindOneParams, @Body() payload: TaskTagsDto) {
+    return this.addTagsService.addTags(params.id, payload);
+  }
+
+  @Patch('remove-tags/:id')
+  removeTags(@Param() params: FindOneParams, @Body() payload: TaskTagsDto) {
+    return this.removeTagsService.removeTags(params.id, payload);
   }
 
   @Patch(':id')

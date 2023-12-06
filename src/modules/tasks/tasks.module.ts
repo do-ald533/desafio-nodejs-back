@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TasksController } from './tasks.controller';
 import {
+  AddTagsService,
   CreatorService,
   FinderService,
   IndexerService,
+  RemoveTagsService,
   RemoverService,
   UpdaterService,
 } from './services';
@@ -20,6 +22,8 @@ import { ProjectRepository } from '../projects/repositories';
     IndexerService,
     FinderService,
     UpdaterService,
+    AddTagsService,
+    RemoveTagsService,
     RemoverService,
     TasksRepository,
     PrismaService,

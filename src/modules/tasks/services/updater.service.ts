@@ -9,7 +9,7 @@ import { TasksRepository } from '../repositories';
 import { UpdateTaskDto } from '../dto';
 import { TasksValidationUtil } from '../utils';
 import { TaskEntity } from '../entities';
-import { Prisma } from '@prisma/client';
+import { Prisma, Status } from '@prisma/client';
 import { PrismaErrorCodes } from '../../../shared/enums';
 import { FinderService } from './finder.service';
 
@@ -25,10 +25,14 @@ export class UpdaterService {
 
   public async update(id: string, payload: UpdateTaskDto) {
     try {
-      const { projectId } = await this.finderService.findById(id);
+      const { projectId, status } = await this.finderService.findById(id);
+
+      if (status === Status.COMPLETED)
+        throw new BadRequestException(`cannot alter completed tasks`);
+
       if (!(await this.tasksValidation.validate(payload.userId, projectId)))
         throw new BadRequestException(
-          `user with id: ${payload.userId} is not member of the project ${id}`,
+          `user with id: ${payload.userId} is not member of the project ${projectId}`,
         );
 
       const updatedTask = await this.tasksRepository.update(

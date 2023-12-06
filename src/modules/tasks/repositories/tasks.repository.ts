@@ -87,6 +87,7 @@ export class TasksRepository {
           OR: data,
         },
       });
+      return { message: 'removed tags succesfully' };
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) throw error;
 
