@@ -26,7 +26,7 @@ export class IndexerService {
       return serializedResult;
     } catch (error) {
       this.logger.error(error);
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(error);
     }
   }
 }
