@@ -1,19 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import { Status } from '../../tasks/enums';
 
-export class ProjectTasksEntity {
+export class ProjectCreatorEntity {
   @ApiProperty()
   id: string;
 
   @ApiProperty()
-  title: string;
+  name: string;
 
-  @Exclude()
-  description: string;
-
-  @ApiProperty({ enum: Status })
-  status: Status;
+  @ApiProperty()
+  email: string;
 
   @Exclude()
   created_at: Date;
@@ -22,9 +18,11 @@ export class ProjectTasksEntity {
   updated_at: Date;
 
   @Exclude()
-  projectId: string;
+  created_projects: Array<string>;
 
-  constructor(partial: Partial<ProjectTasksEntity>) {
+  @Exclude()
+  projects: Array<string>;
+  constructor(partial: Partial<ProjectCreatorEntity>) {
     Object.assign(this, partial);
   }
 }

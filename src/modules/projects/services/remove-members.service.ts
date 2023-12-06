@@ -33,7 +33,9 @@ export class RemoveMembersService {
           payload.creatorId,
         ))
       )
-        throw new NotFoundException();
+        throw new BadRequestException(
+          `only the creator of the project can add users`,
+        );
 
       await Promise.all(
         payload.memberIds.map((id) =>

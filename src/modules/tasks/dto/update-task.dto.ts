@@ -3,18 +3,19 @@ import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { Status } from '../enums';
 
 export class UpdateTaskDto {
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
   @IsNotEmpty()
   title: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
   @IsNotEmpty()
   description: string;
 
+  @ApiProperty({ required: false, enum: Status })
   @IsOptional()
   @IsEnum(Status)
   status: Status;

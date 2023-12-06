@@ -52,7 +52,7 @@ export class UpdaterService {
         error instanceof NotFoundException
       )
         throw new NotFoundException(
-          `could not find project with id: ${id}`,
+          `could not find task with id: ${id}`,
           error.message,
         );
 

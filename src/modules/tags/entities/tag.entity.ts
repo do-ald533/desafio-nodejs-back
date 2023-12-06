@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { TagTasksEntity } from './tag-tasks.entity';
 
 export class TagEntity {
   @ApiProperty()
@@ -8,7 +9,7 @@ export class TagEntity {
   title: string;
 
   @ApiProperty()
-  tasks;
+  tasks: TagTasksEntity[];
 
   constructor(partial: Partial<TagEntity>) {
     Object.assign(this, partial);

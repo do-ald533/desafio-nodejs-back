@@ -22,7 +22,7 @@ export class CreateTaskDto {
   @IsString()
   description: string;
 
-  //   @ApiProperty({ default: Status.PENDING, type: () => Status })
+  @ApiProperty({ default: Status.PENDING, enum: Status })
   @IsOptional()
   @IsEnum(Status)
   status = Status.PENDING;

@@ -3,14 +3,13 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 
+const { npm_package_version } = process.env;
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const config = new DocumentBuilder()
-    .setTitle('API docs')
-    .setDescription('The cats API description')
-    .setVersion('1.0')
-    .addTag('cats')
-    .build();
+  const config = buildSwaggerConfig();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document);
 
   // Use the ValidationPipe globally
   app.useGlobalPipes(
@@ -20,8 +19,15 @@ async function bootstrap() {
     }),
   );
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
   await app.listen(process.env.PORT || 3000);
 }
+
+function buildSwaggerConfig() {
+  return new DocumentBuilder()
+    .setTitle('Challenge API')
+    .setDescription('Projects management')
+    .setVersion(npm_package_version)
+    .build();
+}
+
 bootstrap();
