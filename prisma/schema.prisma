@@ -71,8 +71,8 @@ model Task {
 model TagsTask {
   tagId  String @map("tag_id")
   taskId String @map("task_id")
-  tag    Tag    @relation(fields: [tagId], references: [id])
-  task   Task   @relation(fields: [taskId], references: [id])
+  tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([tagId, taskId])
   @@map("tags_task")
