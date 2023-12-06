@@ -63,7 +63,7 @@ model Task {
   updated_at  DateTime   @updatedAt
   project     Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId   String
-  Tag         TagsTask[]
+  tags         TagsTask[]
 
   @@map("tasks")
 }

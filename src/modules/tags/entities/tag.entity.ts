@@ -9,4 +9,8 @@ export class TagEntity {
 
   @ApiProperty()
   tasks;
+
+  constructor(partial: Partial<TagEntity>) {
+    Object.assign(this, partial);
+  }
 }
