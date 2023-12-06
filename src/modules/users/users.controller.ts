@@ -7,8 +7,6 @@ import {
   Param,
   Delete,
   Query,
-  UseInterceptors,
-  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import {
   CreateUserDto,
