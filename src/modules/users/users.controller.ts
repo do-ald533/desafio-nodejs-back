@@ -26,7 +26,6 @@ import { UserEntity } from './entities';
 import { ApiPaginatedResponse } from '../../shared/decorators/apiPaginatedResponse.decorator';
 import { UpdaterService } from './services/updater.service';
 
-@UseInterceptors(ClassSerializerInterceptor)
 @Controller('users')
 export class UsersController {
   constructor(
@@ -43,7 +42,6 @@ export class UsersController {
   }
 
   @ApiPaginatedResponse(UserEntity)
-  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   findAll(@Query() query: ListAllDto) {
     return this.indexerService.index(query.limit, query.page);

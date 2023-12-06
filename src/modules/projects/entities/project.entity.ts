@@ -1,5 +1,7 @@
 import { Exclude, Type } from 'class-transformer';
 import { UserEntity } from '../../users/entities';
+import { ProjectMembersEntity } from './project-members.entity';
+import { ProjectTasksEntity } from './project-tasks.entity';
 
 export class ProjectEntity {
   id: string;
@@ -14,10 +16,11 @@ export class ProjectEntity {
   @Type(() => UserEntity)
   creator: UserEntity;
 
-  @Type(() => UserEntity)
-  members: UserEntity[];
+  @Type(() => ProjectMembersEntity)
+  members: ProjectMembersEntity[];
 
-  tasks;
+  @Type(() => ProjectTasksEntity)
+  tasks: ProjectTasksEntity[];
 
   constructor(partial: Partial<ProjectEntity>) {
     Object.assign(this, partial);

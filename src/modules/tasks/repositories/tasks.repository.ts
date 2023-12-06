@@ -25,7 +25,10 @@ export class TasksRepository {
 
   public async findById(taskId: string) {
     try {
-      return await this.prisma.task.findFirstOrThrow({ where: { id: taskId } });
+      return await this.prisma.task.findFirstOrThrow({
+        where: { id: taskId },
+        include: { project: true, tags: true },
+      });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) throw error;
 

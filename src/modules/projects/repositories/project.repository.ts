@@ -10,7 +10,7 @@ export class ProjectRepository {
 
   constructor(private readonly prisma: PrismaService) {}
 
-  public async findById(projectId: string): Promise<Project> {
+  public async findById(projectId: string) {
     try {
       const project = await this.prisma.project.findFirstOrThrow({
         where: { id: projectId },
