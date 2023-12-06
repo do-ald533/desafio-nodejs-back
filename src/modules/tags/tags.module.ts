@@ -1,9 +1,25 @@
 import { Module } from '@nestjs/common';
-import { TagsService } from './tags.service';
 import { TagsController } from './tags.controller';
+import {
+  CreatorService,
+  FinderService,
+  IndexerService,
+  RemoverService,
+  UpdaterService,
+} from './services';
+import { TagsRepository } from './repositories';
+import { PrismaService } from '../../shared/services/prisma.service';
 
 @Module({
   controllers: [TagsController],
-  providers: [TagsService],
+  providers: [
+    CreatorService,
+    UpdaterService,
+    RemoverService,
+    FinderService,
+    IndexerService,
+    TagsRepository,
+    PrismaService,
+  ],
 })
 export class TagsModule {}

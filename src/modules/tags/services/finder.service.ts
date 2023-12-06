@@ -4,22 +4,21 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { ProjectRepository } from '../repositories';
+import { TagsRepository } from '../repositories';
+import { TagEntity } from '../entities/';
 import { Prisma } from '@prisma/client';
 import { PrismaErrorCodes } from '../../../shared/enums';
-import { ProjectEntity } from '../entities';
 
 @Injectable()
 export class FinderService {
   private readonly logger = new Logger(FinderService.name);
 
-  constructor(private readonly projectRepository: ProjectRepository) {}
+  constructor(private readonly tagsRepository: TagsRepository) {}
 
-  public async findById(id: string): Promise<ProjectEntity> {
+  public async findById(id: string): Promise<TagEntity> {
     try {
-      const foundProject = await this.projectRepository.findById(id);
-
-      return new ProjectEntity(foundProject);
+      const foundTag = await this.tagsRepository.findById(id);
+      return new TagEntity(foundTag);
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&

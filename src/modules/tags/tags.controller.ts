@@ -1,34 +1,57 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { TagsService } from './tags.service';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
+import {
+  CreatorService,
+  FinderService,
+  IndexerService,
+  RemoverService,
+  UpdaterService,
+} from './services';
+import { TagEntity } from './entities';
+import { FindOneParams, ListAllDto } from './dto';
 
 @Controller('tags')
 export class TagsController {
-  constructor(private readonly tagsService: TagsService) {}
+  constructor(
+    private readonly creatorService: CreatorService,
+    private readonly finderService: FinderService,
+    private readonly indexerService: IndexerService,
+    private readonly removerService: RemoverService,
+    private readonly updaterService: UpdaterService,
+  ) {}
 
   @Post()
-  create(@Body() createTagDto: CreateTagDto) {
-    return this.tagsService.create(createTagDto);
+  create(@Body() createTagDto: CreateTagDto): Promise<TagEntity> {
+    return this.creatorService.create(createTagDto);
   }
 
   @Get()
-  findAll() {
-    return this.tagsService.findAll();
+  findAll(@Query() { limit, page }: ListAllDto) {
+    return this.indexerService.findAll(limit, page);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tagsService.findOne(+id);
+  findOne(@Param() dto: FindOneParams) {
+    return this.finderService.findById(dto.id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTagDto: UpdateTagDto) {
-    return this.tagsService.update(+id, updateTagDto);
+  update(@Param() dto: FindOneParams, @Body() updateTagDto: UpdateTagDto) {
+    return this.updaterService.update(dto.id, updateTagDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tagsService.remove(+id);
+  remove(@Param() dto: FindOneParams) {
+    return this.removerService.remove(dto.id);
   }
 }
