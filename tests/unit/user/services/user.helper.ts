@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker';
 import { CreateUserDto } from '../../../../src/modules/users/dtos';
 import { User } from '@prisma/client';
 import { PaginatedResult } from 'prisma-pagination';
+import { UserEntity } from '../../../../src/modules/users/entities';
 
 export function createUserPayload(dto?: Partial<CreateUserDto>): CreateUserDto {
   return {
@@ -16,7 +17,7 @@ const id = faker.string.uuid();
 const email = faker.internet.email();
 const name = faker.person.fullName();
 
-export function createUserResponse(payload?: any): User {
+export function createUserResponse(payload?: any): UserEntity {
   return {
     id: id,
     email: email,
@@ -31,7 +32,7 @@ export function createUserResponse(payload?: any): User {
 
 export function createUserPaginatedResponse(
   payload?: any,
-): PaginatedResult<User> {
+): PaginatedResult<UserEntity> {
   return {
     data: [createUserResponse(), createUserResponse(), createUserResponse()],
     meta: {
