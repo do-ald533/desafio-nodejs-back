@@ -10,6 +10,7 @@ import { CreateTaskDto } from '../dto';
 import { TasksValidationUtil } from '../utils';
 import { Prisma } from '@prisma/client';
 import { PrismaErrorCodes } from '../../../shared/enums';
+import { FinderService as TagFinderService } from '../../tags/services';
 
 @Injectable()
 export class CreatorService {
@@ -18,7 +19,12 @@ export class CreatorService {
   constructor(
     private readonly tasksRepository: TasksRepository,
     private readonly tasksValidation: TasksValidationUtil,
+    private readonly tagFinderService: TagFinderService,
   ) {}
+
+  private validateTags(tagIds: string[]) {
+    return tagIds.map((id) => this.tagFinderService.findById(id));
+  }
 
   public async create(payload: CreateTaskDto) {
     try {
@@ -32,11 +38,18 @@ export class CreatorService {
           `user with id: ${payload.userId} is not member of the project ${payload.projectId}`,
         );
 
+      const tagIds = await Promise.all(this.validateTags(payload.tagIds));
+
       const createdTask = await this.tasksRepository.create({
         title: payload.title,
         projectId: payload.projectId,
         status: payload.status,
         description: payload.description,
+        tags: {
+          createMany: {
+            data: tagIds.map(({ id }) => ({ tagId: id })),
+          },
+        },
       });
       return createdTask;
     } catch (error) {

@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsArray,
   IsEnum,
   IsNotEmpty,
   IsOptional,
@@ -35,4 +36,9 @@ export class CreateTaskDto {
   @IsNotEmpty()
   @IsUUID()
   userId: string;
+
+  @ApiProperty()
+  @IsArray()
+  @IsUUID(undefined, { each: true })
+  tagIds: string[];
 }

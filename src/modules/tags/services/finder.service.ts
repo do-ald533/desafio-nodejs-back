@@ -25,7 +25,7 @@ export class FinderService {
         error.code === PrismaErrorCodes.NOT_FOUND
       )
         throw new NotFoundException(
-          `could not find project with id: ${id}`,
+          `could not find tag with id: ${id}`,
           error.message,
         );
 

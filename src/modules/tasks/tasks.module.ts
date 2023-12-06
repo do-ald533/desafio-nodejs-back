@@ -13,7 +13,9 @@ import { TasksRepository } from './repositories';
 import { PrismaService } from '../../shared/services/prisma.service';
 import { TasksValidationUtil } from './utils';
 import { FinderService as ProjectFinderService } from '../projects/services';
+import { FinderService as TagFinderService } from '../tags/services';
 import { ProjectRepository } from '../projects/repositories';
+import { TagsRepository } from '../tags/repositories';
 
 @Module({
   controllers: [TasksController],
@@ -24,8 +26,10 @@ import { ProjectRepository } from '../projects/repositories';
     UpdaterService,
     AddTagsService,
     RemoveTagsService,
+    TagFinderService,
     RemoverService,
     TasksRepository,
+    TagsRepository,
     PrismaService,
     TasksValidationUtil,
     ProjectFinderService,
