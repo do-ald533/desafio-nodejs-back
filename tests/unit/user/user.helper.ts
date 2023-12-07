@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker';
 import { CreateUserDto } from '../../../src/modules/users/dtos';
-import { User } from '@prisma/client';
 import { PaginatedResult } from 'prisma-pagination';
 import { UserEntity } from '../../../src/modules/users/entities';
 
