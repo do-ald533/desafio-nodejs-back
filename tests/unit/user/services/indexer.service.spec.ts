@@ -1,7 +1,7 @@
 import { TestBed } from '@automock/jest';
 import { UserRepository } from '../../../../src/modules/users/repositories';
 import { IndexerService } from '../../../../src/modules/users/services';
-import { createUserPaginatedResponse } from './user.helper';
+import { createUserPaginatedResponse } from '../user.helper';
 
 describe('User Indexer Service', () => {
   let service: IndexerService;

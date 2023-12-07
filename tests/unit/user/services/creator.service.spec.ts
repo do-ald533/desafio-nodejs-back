@@ -1,6 +1,6 @@
 import { CreatorService } from '../../../../src/modules/users/services';
 import { UserRepository } from '../../../../src/modules/users/repositories';
-import { createUserPayload, createUserResponse } from './user.helper';
+import { createUserPayload, createUserResponse } from '../user.helper';
 import { TestBed } from '@automock/jest';
 import { PasswordUtils } from '../../../../src/modules/users/utils';
 import { UserEntity } from '../../../../src/modules/users/entities';
@@ -16,10 +16,6 @@ describe('User CreatorService', () => {
     service = unit;
     repository = unitRef.get(UserRepository);
     passwordUtil = unitRef.get(PasswordUtils);
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
   });
 
   afterEach(() => {

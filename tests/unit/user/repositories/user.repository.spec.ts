@@ -1,46 +1,68 @@
 import { TestBed } from '@automock/jest';
 import { UserRepository } from '../../../../src/modules/users/repositories';
 import { PrismaService } from '../../../../src/shared/services/prisma.service';
-import { createUserPayload, createUserResponse } from '../services/user.helper';
 
 describe('UserRepository', () => {
   let repository: UserRepository;
-  let prisma: jest.Mocked<PrismaService>;
-  const { name, email } = createUserPayload();
+  let prisma: jest.MockedObjectDeep<PrismaService>;
 
   beforeAll(() => {
     const { unit, unitRef } = TestBed.create(UserRepository)
       .mock(PrismaService)
       .using({
         user: {
-          create: jest
-            .fn()
-            .mockResolvedValue(createUserResponse({ name, email })),
+          create: jest.fn(),
+          delete: jest.fn(),
           update: jest.fn(),
           findFirstOrThrow: jest.fn(),
-          delete: jest.fn(),
         },
       })
       .compile();
 
     repository = unit;
-    prisma = unitRef.get(PrismaService);
+    prisma = unitRef.get(PrismaService) as jest.MockedObjectDeep<PrismaService>;
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should create a user in db', async () => {
-    const response = await repository.create({
-      password_hash: '',
-      salt: '',
-      name,
-      email,
+  it('should create a user', async () => {
+    const payload = {
+      name: 'test',
+      password_hash: 'sla',
+      salt: 'sla2',
+      email: 'test@test.com',
+    };
+    prisma.user.create.mockResolvedValue({
+      ...payload,
+      id: 'aaabbbccc',
+      created_at: new Date(),
+      updated_at: new Date(),
     });
 
+    const response = await repository.create(payload);
+
+    expect(response).toHaveProperty('id');
     expect(prisma.user.create).toHaveBeenCalled();
-    expect(response.name).toBe(name);
-    expect(response.email).toBe(email);
+  });
+
+  it('should get signle user from db', async () => {
+    const payloadDb = {
+      name: 'test',
+      password_hash: 'sla',
+      salt: 'sla2',
+      email: 'test@test.com',
+    };
+    prisma.user.findFirstOrThrow.mockResolvedValue({
+      ...payloadDb,
+      id: 'aaabbbccc',
+      created_at: new Date(),
+      updated_at: new Date(),
+    });
+
+    const response = await repository.findById('123');
+    expect(response).toHaveProperty('id');
+    expect(prisma.user.findFirstOrThrow).toHaveBeenCalled();
   });
 });
