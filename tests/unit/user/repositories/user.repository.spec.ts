@@ -1,7 +1,7 @@
 import { TestBed } from '@automock/jest';
 import { UserRepository } from '../../../../src/modules/users/repositories';
 import { PrismaService } from '../../../../src/shared/services/prisma.service';
-import { createUserPayload, createUserResponse } from '../services/user.helper';
+import { createUserPayload, createUserResponse } from '../user.helper';
 
 describe('UserRepository', () => {
   let repository: UserRepository;

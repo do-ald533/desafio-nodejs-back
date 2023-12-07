@@ -13,8 +13,8 @@ export class ListAllDto {
   @ApiProperty({ required: false })
   @IsOptional()
   @IsInt()
-  @Min(1)
   @Max(100)
+  @Min(1)
   @Type(() => Number)
   limit?: number = 10;
 }

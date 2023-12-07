@@ -1,9 +1,10 @@
 import { TestBed } from '@automock/jest';
 import { UserRepository } from '../../../../src/modules/users/repositories';
-import { createUserResponse } from './user.helper';
+import { createUserResponse } from '../user.helper';
 import { UpdaterService } from '../../../../src/modules/users/services/updater.service';
 import { FinderService } from '../../../../src/modules/users/services';
 import { UserUtils } from '../../../../src/modules/users/utils';
+import { NotFoundException } from '@nestjs/common';
 
 describe('User Updater Service', () => {
   let service: UpdaterService;
@@ -54,5 +55,20 @@ describe('User Updater Service', () => {
     );
     expect(finderService.findOne).toHaveBeenCalled();
     expect(userUtils.verifyUser).toHaveBeenCalled();
+  });
+
+  it('should return a not found error', async () => {
+    const updatePayload = {
+      name: 'testando',
+      email: 'ola@mundo',
+      password: 'senha',
+    };
+    finderService.findOne.mockRejectedValue(new NotFoundException());
+
+    try {
+      await service.update('...', updatePayload);
+    } catch (error) {
+      expect(error).toBeInstanceOf(NotFoundException);
+    }
   });
 });

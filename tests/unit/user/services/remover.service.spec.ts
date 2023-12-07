@@ -4,9 +4,10 @@ import {
   FinderService,
   RemoverService,
 } from '../../../../src/modules/users/services';
-import { createUserResponse } from './user.helper';
+import { createUserResponse } from '../user.helper';
 import { faker } from '@faker-js/faker';
 import { NotFoundException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 
 describe('User Remover Service', () => {
   let service: RemoverService;
@@ -40,9 +41,12 @@ describe('User Remover Service', () => {
   });
 
   it('should fail to delete a user throwing a not found exception', async () => {
-    finderService.findOne.mockImplementation(() => {
-      throw new NotFoundException();
-    });
+    finderService.findOne.mockRejectedValue(
+      new Prisma.PrismaClientKnownRequestError('', {
+        code: 'P2025',
+        clientVersion: '5',
+      }),
+    );
 
     try {
       await service.remove('...');
